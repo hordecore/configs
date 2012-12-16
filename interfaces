@@ -1,0 +1,15 @@
+auto lo br0 br1
+iface lo inet loopback
+
+iface br0 inet static
+        bridge_ports	eth0
+	address		10.1.1.140
+	broadcast	10.1.255.255
+	netmask		255.255.0.0
+	gateway 	10.1.1.1
+
+iface br1 inet static
+	bridge_ports	eth1
+	address		192.168.192.168
+	broadcast	192.168.255.255
+	netmask		255.255.0.0

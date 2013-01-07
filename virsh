@@ -1,0 +1,41 @@
+# bash completion for virsh(8)
+# author: Oleg Strizhechenko
+# shit happens, write less, google more: better version exists about 2-3 years
+# http://www.redhat.com/archives/libvir-list/2011-October/msg00141.html
+# Но я чтобы зря не пропадало написаное, пусть уж хранится
+
+have virsh && {
+_virsh_all_machines()
+{
+    COMPREPLY=( $( compgen -W "$(virsh list --all | tail -n +3 | grep -v "^$"  | awk '{print $2}')" -- "$cur" ) )
+}
+
+_virsh()
+{
+    local cur prev
+    COMPREPLY=()
+    cur=`_get_cword`
+    prev=${COMP_WORDS[COMP_CWORD-1]}
+    case $prev in
+        @(destroy|list|undefine|start|shutdown|dumpxml))
+            # defined machines completion
+            _virsh_all_machines
+            return 0
+            ;;
+    esac
+
+    if [[ "$cur" == "" ]]; then
+       # relevant options completion
+        COMPREPLY=( $( compgen -W 'destroy start define shutdown undefine list dumpxml' -- "$cur" ) )
+    fi
+}
+complete -F _virsh virsh
+}
+
+# Local variables:
+# mode: shell-script
+# sh-basic-offset: 4
+# sh-indent-comment: t
+# indent-tabs-mode: nil
+# End:
+# ex: ts=4 sw=4 et filetype=sh

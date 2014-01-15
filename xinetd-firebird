@@ -1,0 +1,23 @@
+# default: on
+# description: FirebirdSQL server
+#
+# Be careful when commenting out entries in this file. Active key entry should
+# be the first as some scripts (CSchangeRunUser.sh in particular) use sed 
+# scripting to modify it.
+
+service gds_db
+{
+        disable = no
+        flags           = REUSE
+        socket_type     = stream
+        wait            = no
+        user                    = firebird
+        instances = 120
+        # максимальная скорость 1000 коннектов в секунду. после чего disable на 20 секунд
+        cps = 1000 20
+        per_source = 300
+        log_on_success  =
+        log_on_failure  += USERID
+        server          = /usr/lib64/firebird/bin/fb_inet_server
+        bind            = 999.999.999.999
+}
